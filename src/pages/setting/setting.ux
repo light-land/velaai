@@ -21,6 +21,10 @@
             <text if="{{ balanceErr }}" class="set-value danger-label">{{ balance }}</text>
             <text else class="set-value">{{ balance }}</text>
           </div>
+          <div class="set-row">
+            <text class="set-label">已用 token</text>
+            <text class="set-value">{{ usedTokensText }}</text>
+          </div>
           <div class="set-row" @click="editText('username')">
             <text class="set-label">用户名</text>
             <text class="set-value">{{ username }}</text>
@@ -32,7 +36,7 @@
             <text else class="set-value">未设置</text>
           </div>
           <div class="set-row" @click="toggle('stripMarkdown')">
-            <text class="set-label">去除 Markdown</text>
+            <text class="set-label">去除 MarkDown</text>
             <img if="{{ stripMarkdown }}" class="set-img" src="/common/true.png" />
             <img else class="set-img" src="/common/false.png" />
           </div>
@@ -97,6 +101,7 @@ export default {
     balance: "—",
     balanceErr: false,
     modelErr: "",
+    usedTokensText: "",
     username: "用户",
     model: "",
     stripMarkdown: true,
@@ -192,6 +197,27 @@ export default {
     this.autoCleanEnabled = s.autoCleanEnabled
     this.autoCleanTurns = s.autoCleanTurns
     this.autoCleanDays = s.autoCleanDays
+    this.usedTokensText = this.fmtTokens(s.usedTokens || 0)
+    console.log("usedTokens read =", s.usedTokens, "->", this.usedTokensText)
+  },
+
+  // 已用 tokens 格式化：<1000 原样；≥1000 用 k；≥100万 用 m；≥10亿 用 b（保留 1 位小数并去掉多余的 .0）
+  fmtTokens(n) {
+    let v = n
+    let unit = ""
+    if (v >= 1e9) {
+      v = v / 1e9
+      unit = "b"
+    } else if (v >= 1e6) {
+      v = v / 1e6
+      unit = "m"
+    } else if (v >= 1e3) {
+      v = v / 1e3
+      unit = "k"
+    }
+    let s = (Math.round(v * 10) / 10).toString()
+    s = s.replace(/\.0$/, "")
+    return s + unit
   },
 
   async toggle(field) {
@@ -201,7 +227,7 @@ export default {
 
   editText(field) {
     this._editingField = field
-    const labels = { apiKey: "API Key", username: "用户名" }
+    const labels = {apiKey: "API Key", username: "用户名"}
     router.push({
       uri: "/pages/textinput",
       params: {
@@ -215,10 +241,15 @@ export default {
 
   editNumber(field) {
     this._editingField = field
-    const labels = { autoCleanTurns: "清理回合之外", autoCleanDays: "清理天数以外" }
+    const labels = {autoCleanTurns: "清理回合之外", autoCleanDays: "清理天数以外"}
     router.push({
       uri: "/pages/textinput",
-      params: { title: labels[field] || "输入数字", field: field, ret: "setting", value: String(this[field]) }
+      params: {
+        title: labels[field] || "输入数字",
+        field: field,
+        ret: "setting",
+        value: String(this[field])
+      }
     })
   },
 
@@ -254,12 +285,15 @@ export default {
   clearAll() {
     const that = this
     vibrator.vibrate({mode: "short"})
-    store.clear().then(function () {
-      return settings.clear()
-    }).then(function () {
-      that.bindAll()
-      showToast({message: "所有数据已清空", duration: 1500})
-    })
+    store
+      .clear()
+      .then(function () {
+        return settings.clear()
+      })
+      .then(function () {
+        that.bindAll()
+        showToast({message: "所有数据已清空", duration: 1500})
+      })
   }
 }
 </script>

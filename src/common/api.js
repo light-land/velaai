@@ -73,7 +73,7 @@ export async function chat(opts) {
     temperature: opts.temperature
   }
   if (opts.maxTokens !== "" && opts.maxTokens !== undefined && opts.maxTokens !== null) {
-    body.max_tokens = opts.maxTokens
+    body.max_tokens = parseInt(opts.maxTokens, 10)
   }
   // 深度思考：仅开启时传（thinking 模型支持，其余模型会忽略或报错）
   if (opts.thinking) body.thinking = { type: "enabled" }

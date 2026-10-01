@@ -3,17 +3,16 @@
     <text class="time">{{ time }}</text>
     <text class="title">{{ titleText }}</text>
     <img class="top leftButton" src="/common/right.png" @click="goHistory" />
-    <!-- 正常输出完成后右上角显示 again（再次请求）；其余时间显示更多菜单 -->
-    <text if="{{ showAgain }}" class="again-btn" @click="sendAgain">again</text>
-    <img if="{{ !showAgain }}" class="top rightButton" src="/common/more_rect.png" @click="showMore" />
+    <!-- 右上角：默认不显示任何东西；正常输出完成后显示 again.png（再次请求） -->
+    <img if="{{ showAgain }}" class="top rightButton" src="/common/again.png" @click="sendAgain" />
     <div class="box">
       <scroll id="msgScroll" scroll-y="true" bounces="true">
-        <!-- 思考中：最新位置在列表最顶部；点击气泡或底部按钮均可停止 -->
+        <!-- 思考中：最新位置在列表最顶部；点击右下角 download 按钮停止 -->
         <div if="{{ thinking }}" class="bubble-row">
           <div class="msg-col msg-col-ai">
             <text class="msg-name">{{ modelName }}</text>
-            <div class="bubble bubble-ai" @click="stopThinking">
-              <text class="bubble-text thinking-text">正在思考中...（点击停止）</text>
+            <div class="bubble bubble-ai">
+              <text class="bubble-text thinking-text">正在思考…</text>
             </div>
           </div>
         </div>
@@ -24,7 +23,9 @@
             <text if="{{ $item.error }}" class="msg-name msg-name-error">错误</text>
             <text elif="{{ $item.model }}" class="msg-name">{{ $item.model }}</text>
             <div class="bubble {{ $item.error ? 'bubble-error' : 'bubble-ai' }}">
-              <text class="bubble-text {{ $item.error ? 'error-text' : '' }}">{{ $item.content }}</text>
+              <text class="bubble-text {{ $item.error ? 'error-text' : '' }}">
+                {{ $item.content }}
+              </text>
             </div>
           </div>
           <!-- 用户：靠右，用户名在气泡上方 -->
@@ -54,7 +55,7 @@
 
 <script>
 import router from "@system.router"
-import {showActionMenu, showToast} from "@system.prompt"
+import {showToast} from "@system.prompt"
 import * as settings from "../../common/settings.js"
 import * as api from "../../common/api.js"
 import * as store from "../../common/store.js"
@@ -79,7 +80,10 @@ function stripMd(text) {
     if (/^\s*(-{3,}|\*{3,})\s*$/.test(l)) return "" // 水平线整行去除
     return l
   })
-  return lines.join("\n").replace(/\n{3,}/g, "\n\n").trim()
+  return lines
+    .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim()
 }
 
 // 字节长度：汉字/全角算 2 字节，ASCII 算 1 字节
@@ -140,6 +144,8 @@ export default {
       this.showWelcome = true
       this.welcomeText = pickWelcome(this.username)
     }
+    // 已有历史消息 = 旧对话：右上角显示重新思考按钮（可重新发送最后一条问题）
+    this.showAgain = this.messages.length > 0
     router.clear()
   },
 
@@ -171,7 +177,7 @@ export default {
   async send() {
     const text = this.draft
     if (!text) {
-      showToast({message: "请先输入内容", duration: 1200})
+      showToast({message: "请输入问题", duration: 1200})
       return
     }
     if (this.thinking) return // 防连点
@@ -194,9 +200,7 @@ export default {
     // 真实 API：上下文 = 摘要（并入 system）+ 未总结的新消息（总结功能节省 token）
     const that = this
     const ctx = that.messages.slice(that.summarizedCount)
-    const sys = that.convSummary
-      ? s.system + "\n\n[此前对话摘要]：" + that.convSummary
-      : s.system
+    const sys = that.convSummary ? s.system + "\n\n[此前对话摘要]：" + that.convSummary : s.system
     try {
       const ret = await api.chat({
         apiKey: s.apiKey,
@@ -218,9 +222,13 @@ export default {
       that.persist()
       // 正常输出完成：右上角显示 again 供再次请求
       that.showAgain = true
-      // 累计真实 token 用量
-      if (ret.usage && ret.usage.total_tokens) {
-        settings.update({usedTokens: (s.usedTokens || 0) + ret.usage.total_tokens})
+      // 累计真实 token 用量（await 保证先落盘，再跳转设置页才能读到）
+      if (ret.usage) {
+        console.log("usage =", JSON.stringify(ret.usage))
+        const t = ret.usage.total_tokens || (ret.usage.prompt_tokens || 0) + (ret.usage.completion_tokens || 0)
+        if (t > 0) {
+          await settings.update({usedTokens: (s.usedTokens || 0) + t})
+        }
       }
       // 标题生成（仅第一轮）与周期总结，后台执行不阻塞
       that.maybeTitle()
@@ -247,17 +255,26 @@ export default {
     return e && e.message ? e.message : "请求失败"
   },
 
-  // 再次请求：取最后一条用户消息重新发送
+  // 再次请求：先删除上一轮对话（最后一条用户消息及其 AI 回复），再重新发送
   sendAgain() {
     if (this.thinking) return
     let last = ""
+    let lastIdx = -1
     for (let i = this.messages.length - 1; i >= 0; i--) {
       if (this.messages[i].role === "user") {
         last = this.messages[i].content
+        lastIdx = i
         break
       }
     }
     if (!last) return
+    // 截断到结尾：同时移除最后一条用户消息及其后的 AI 回复
+    this.messages.splice(lastIdx)
+    // 计数修正：被删消息若已并入摘要，收紧计数避免越界
+    if (this.summarizedCount > this.messages.length) this.summarizedCount = this.messages.length
+    if (this.summaryTriedAt > this.messages.length) this.summaryTriedAt = this.messages.length
+    this.syncDisplay()
+    this.persist()
     this.draft = last
     this.send()
   },
@@ -300,10 +317,14 @@ export default {
       const ret = await api.chat({
         apiKey: s.apiKey,
         model: s.model,
-        system: "用户会输入一轮对话，请你为这一段对话总结一个标题。要求：最大长度不能超过 20 个字节（一个英文字母算一个字节，一个汉字算两个字节）。",
+        system:
+          "用户会输入一轮对话，请你为这一段对话总结一个标题。要求：最大长度不能超过 20 个字节（一个英文字母算一个字节，一个汉字算两个字节）。",
         thinking: false,
         messages: [
-          {role: "user", content: "用户：" + this.messages[0].content + "\n助手：" + this.messages[1].content}
+          {
+            role: "user",
+            content: "用户：" + this.messages[0].content + "\n助手：" + this.messages[1].content
+          }
         ]
       })
       let t = String(ret.content).trim()
@@ -342,11 +363,17 @@ export default {
     // 渲染待总结的新增消息
     let text = ""
     for (let i = this.summarizedCount; i < this.messages.length; i++) {
-      text += (this.messages[i].role === "user" ? "用户：" : "助手：") + this.messages[i].content + "\n"
+      text +=
+        (this.messages[i].role === "user" ? "用户：" : "助手：") + this.messages[i].content + "\n"
     }
     const prompt = this.convSummary
-      ? "已有的对话摘要：\n" + this.convSummary + "\n\n新增对话：\n" + text + "\n请把新增对话合并进摘要，输出更新后的完整摘要（保留关键信息与未完成事项，忽略寒暄），直接输出正文。"
-      : "请将以下对话总结为一段简洁的中文摘要，保留关键信息与未完成事项，忽略寒暄，直接输出摘要正文：\n\n" + text
+      ? "已有的对话摘要：\n" +
+        this.convSummary +
+        "\n\n新增对话：\n" +
+        text +
+        "\n请把新增对话合并进摘要，输出更新后的完整摘要（保留关键信息与未完成事项，忽略寒暄），直接输出正文。"
+      : "请将以下对话总结为一段简洁的中文摘要，保留关键信息与未完成事项，忽略寒暄，直接输出摘要正文：\n\n" +
+        text
     try {
       const ret = await api.chat({
         apiKey: s.apiKey,
@@ -371,29 +398,19 @@ export default {
   stopThinking() {
     this.reqSeq++ // 使进行中请求的响应失效
     this.thinking = false
-    showToast({message: "已停止，结果已丢弃", duration: 1200})
+    // 把刚发送、尚无回复的这条消息移除，并将其文本还原回输入框
+    const last = this.messages[this.messages.length - 1]
+    if (last && last.role === "user") {
+      this.draft = last.content
+      this.messages = this.messages.slice(0, this.messages.length - 1) // 新数组赋值，保证响应式更新
+      this.syncDisplay()
+      this.persist()
+    }
+    showToast({message: "已停止思考", duration: 1200})
   },
 
   goHistory() {
     router.push({uri: "/pages/history"})
-  },
-
-  showMore() {
-    const that = this
-    showActionMenu({
-      items: ["新对话", "历史记录", "设置", "关于"],
-      success: function (ret) {
-        if (ret.index === 0) {
-          that.newConversation()
-        } else if (ret.index === 1) {
-          router.push({uri: "/pages/history"})
-        } else if (ret.index === 2) {
-          router.push({uri: "/pages/setting"})
-        } else {
-          router.push({uri: "/pages/about"})
-        }
-      }
-    })
   },
 
   newConversation() {
@@ -561,25 +578,10 @@ scroll {
   margin-left: 10px;
 }
 
-/* 右上角 again：正常输出完成后出现，位置对齐 more 按钮 */
-.again-btn {
-  position: absolute;
-  top: 36px;
-  right: 6px;
-  font-size: 20px;
-  color: #999999;
-  lines: 1;
-}
-
 @media (device-type: band) and (shape: rect) {
   .box {
     margin-top: 92px;
     width: 83%;
-  }
-
-  .again-btn {
-    top: 6px;
-    right: 6px;
   }
 }
 
@@ -587,11 +589,6 @@ scroll {
   .box {
     margin-top: 102px;
     width: 90%;
-  }
-
-  .again-btn {
-    top: 20px;
-    right: 20px;
   }
 }
 </style>

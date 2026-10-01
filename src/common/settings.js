@@ -32,8 +32,14 @@ function get(key) {
   return new Promise(function (resolve) {
     storage.get({
       key: key,
-      success: function (v) { resolve(v) },
-      fail: function () { resolve(undefined) },
+      success: function (v) {
+        if (key === "usedTokens") console.log("storage.get usedTokens =", JSON.stringify(v))
+        resolve(v)
+      },
+      fail: function () {
+        if (key === "usedTokens") console.log("storage.get usedTokens FAIL")
+        resolve(undefined)
+      },
       complete: function () {}
     })
   })
@@ -43,9 +49,16 @@ function set(key, value) {
   return new Promise(function (resolve) {
     storage.set({
       key: key,
-      value: value,
-      success: function () { resolve() },
-      fail: function () { resolve() },
+      // 统一转成字符串存储：部分 Vela 版本对数字值写入/读取不可靠（usedTokens 曾写入 2270 读回 0）
+      value: typeof value === "string" ? value : String(value),
+      success: function () {
+        if (key === "usedTokens") console.log("storage.set usedTokens OK =", JSON.stringify(value))
+        resolve()
+      },
+      fail: function () {
+        if (key === "usedTokens") console.log("storage.set usedTokens FAIL =", JSON.stringify(value))
+        resolve()
+      },
       complete: function () {}
     })
   })
