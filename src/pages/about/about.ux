@@ -3,6 +3,8 @@
     <text class="time">{{ time }}</text>
     <text class="title">关于</text>
     <img class="top leftButton" src="/common/back_rect.png" @click="routeBack" />
+    <!-- 右上角 More（三点）：跳转赞赏页 -->
+    <img class="top rightButton" src="/common/more_rect.png" @click="goMoney" />
     <text class="bold spacer-large"></text>
     <div class="box">
       <scroll class="box" scroll-x="false" scroll-y="true" bounces="true">
@@ -50,6 +52,10 @@ export default {
 
   routeBack() {
     router.back()
+  },
+
+  goMoney() {
+    router.push({uri: "/pages/money"})
   }
 }
 </script>

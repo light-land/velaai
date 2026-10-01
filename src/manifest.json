@@ -44,6 +44,9 @@
       "pages/about": {
         "component": "about"
       },
+      "pages/money": {
+        "component": "money"
+      },
       "pages/history": {
         "component": "history"
       },
