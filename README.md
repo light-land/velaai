@@ -116,4 +116,3 @@ velaai/
 - [小鱼yuzifu](https://github.com/sf-yuzifu) - 原始项目作者
 - [无源流沙](https://www.bandbbs.cn/threads/14584/) - UI 界面风格
 - [NEORUAA](https://github.com/NEORUAA/) - 输入法组件
-- DeepSeek - API 服务提供
