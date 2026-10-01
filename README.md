@@ -4,6 +4,7 @@
 <h1 align="center">Vela AI</h1>
 <p align="center">
     一款专为 Vela 系统设计的 AI 对话快应用，接入 DeepSeek API，让你在手腕上随时随地进行智能对话
+    本项目基于小鱼yuzifu 的 daymatter-https://github.com/sf-yuzifu/daymatter
 </p>
 
 ## 📱 兼容设备
