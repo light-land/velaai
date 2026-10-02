@@ -11,7 +11,7 @@
       "media/139109.png"
     ],
     "icon": "media/139116.png",
-    "cover": "media/139132.png",
+    "cover": "media/139141.png",
     "author": [
       {
         "name": "thel",
@@ -34,11 +34,13 @@
   "downloads": {
     "xmb9p": {
       "version": "1.0.0",
-      "file_name": "downloads/com.lightland.velaai.release.1.0.0.rpk"
+      "file_name": "downloads/com.lightland.velaai.release.1.0.0.rpk",
+      "versionCode": 1
     },
     "xmb10p": {
       "version": "1.0.0",
-      "file_name": "downloads/com.lightland.velaai.release.1.0.0.rpk"
+      "file_name": "downloads/com.lightland.velaai.release.1.0.0.rpk",
+      "versionCode": 1
     }
   },
   "ext": {}
