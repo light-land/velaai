@@ -1,0 +1,45 @@
+{
+  "item": {
+    "id": "com.lightland.velaai",
+    "restype": "quick_app",
+    "name": "VelaAI",
+    "description": "一个运行在小米手环上可以调用 DeepSeek API 的客户端：\n\n1. 可以实时查看 Token 消耗量与剩余额度，随时掌握使用情况。\n2. 支持上下文关联、多轮连续对话，并能在同一会话中管理多组独立对话，切换自如。\n3. 支持数据持久化存储，历史记录不丢失，下次打开即可继续。",
+    "preview": [
+      "media/139113.png",
+      "media/139107.png",
+      "media/139111.png",
+      "media/139109.png"
+    ],
+    "icon": "media/139116.png",
+    "cover": "media/139132.png",
+    "author": [
+      {
+        "name": "thel",
+        "bindABAccount": true
+      }
+    ]
+  },
+  "links": [
+    {
+      "title": "GitHub",
+      "url": "https://github.com/light-land/velaai",
+      "icon": "GithubLogo"
+    },
+    {
+      "title": "爱发电",
+      "url": "https://ifdian.net/a/light-land",
+      "icon": "Money"
+    }
+  ],
+  "downloads": {
+    "xmb9p": {
+      "version": "1.0.0",
+      "file_name": "downloads/com.lightland.velaai.release.1.0.0.rpk"
+    },
+    "xmb10p": {
+      "version": "1.0.0",
+      "file_name": "downloads/com.lightland.velaai.release.1.0.0.rpk"
+    }
+  },
+  "ext": {}
+}
