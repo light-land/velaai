@@ -23,27 +23,16 @@
     {
       "title": "GitHub",
       "url": "https://github.com/light-land/velaai",
-      "icon": "GithubLogo"
+      "icon": "github-logo"
     },
     {
       "title": "爱发电",
       "url": "https://ifdian.net/a/light-land",
-      "icon": "Money"
+      "icon": "money"
     }
   ],
   "downloads": {
     "xmb9p": {
-      "version": "1.1.0",
-      "file_name": "downloads/com.lightland.velaai.release.1.1.0.rpk",
-      "versionCode": 2,
-      "updatelogs": [
-        {
-          "version": "1.1.0",
-          "content": "新增 请求错误后，可重新请求\n          请求结束后，且请求成功，可撤回上一轮对话(文本框需要为空)\n修复 长按确认后会再次弹出“长按确认”\n优化 文本框的文本显示处理逻辑"
-        }
-      ]
-    },
-    "xmb10p": {
       "version": "1.1.0",
       "file_name": "downloads/com.lightland.velaai.release.1.1.0.rpk",
       "versionCode": 2,
