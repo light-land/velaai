@@ -33,10 +33,14 @@
   ],
   "downloads": {
     "xmb9p": {
-      "version": "1.1.0",
-      "file_name": "downloads/com.lightland.velaai.release.1.1.0.rpk",
-      "versionCode": 2,
+      "version": "1.2.0",
+      "file_name": "downloads/com.lightland.velaai.release.1.2.0.rpk",
+      "versionCode": 3,
       "updatelogs": [
+        {
+          "version": "1.2.0",
+          "content": "新增 自定义请求网址 @Wxjxpp\n优化 请求处理逻辑"
+        },
         {
           "version": "1.1.0",
           "content": "新增 请求错误后，可重新请求\n          请求结束后，且请求成功，可撤回上一轮对话(文本框需要为空)\n修复 长按确认后会再次弹出“长按确认”\n优化 文本框的文本显示处理逻辑"
