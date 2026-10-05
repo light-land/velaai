@@ -3,7 +3,7 @@
     "id": "com.lightland.velaai",
     "restype": "quick_app",
     "name": "VelaAI",
-    "description": "一个运行在小米手环上可以调用 DeepSeek API 的客户端：\n\n1. 可以实时查看 Token 消耗量与剩余额度，随时掌握使用情况。\n2. 支持上下文关联、多轮连续对话，并能在同一会话中管理多组独立对话，切换自如。\n3. 支持数据持久化存储，历史记录不丢失，下次打开即可继续。\n\n部分设备可能需要安装并启用SimpleFetch插件",
+    "description": "一个运行在小米手环上可以调用 DeepSeek API 的客户端：\n\n1. 可以实时查看 Token 消耗量与剩余额度，随时掌握使用情况。\n2. 支持上下文关联、多轮连续对话，并能在同一会话中管理多组独立对话，切换自如。\n3. 支持数据持久化存储，历史记录不丢失，下次打开即可继续。\n\n部分设备需要安装并启用网桥插件\n每次连上蓝牙之后，需要在插件中打开网桥插件，进行监听",
     "preview": [
       "media/139113.png",
       "media/139107.png",
@@ -33,10 +33,14 @@
   ],
   "downloads": {
     "xmb9p": {
-      "version": "1.3.1",
-      "file_name": "downloads/com.lightland.velaai.release.1.3.1.rpk",
-      "versionCode": 5,
+      "version": "1.3.2",
+      "file_name": "downloads/com.lightland.velaai.release.1.3.2.rpk",
+      "versionCode": 6,
       "updatelogs": [
+        {
+          "version": "1.3.2",
+          "content": "放弃使用SimpleFetch插件方案，改用网桥插件方案\n修复 手环端与网桥的通信"
+        },
         {
           "version": "1.3.1",
           "content": "尝试修复 手环端与SimpleFetch插件牵手\n“启用SimpleFetch选项的状态"
@@ -56,10 +60,14 @@
       ]
     },
     "xmrw5": {
-      "version": "1.3.1",
-      "file_name": "downloads/com.lightland.velaai.release.1.3.1.rpk",
-      "versionCode": 5,
+      "version": "1.3.2",
+      "file_name": "downloads/com.lightland.velaai.release.1.3.2.rpk",
+      "versionCode": 6,
       "updatelogs": [
+        {
+          "version": "1.3.2",
+          "content": "放弃使用SimpleFetch插件方案，改用网桥插件方案\n修复 手环端与网桥的通信"
+        },
         {
           "version": "1.3.1",
           "content": "尝试修复 手环端与SimpleFetch插件牵手\n“启用SimpleFetch选项的状态"
@@ -79,10 +87,14 @@
       ]
     },
     "xmrw5xring": {
-      "version": "1.3.1",
-      "file_name": "downloads/com.lightland.velaai.release.1.3.1.rpk",
-      "versionCode": 5,
+      "version": "1.3.2",
+      "file_name": "downloads/com.lightland.velaai.release.1.3.2.rpk",
+      "versionCode": 6,
       "updatelogs": [
+        {
+          "version": "1.3.2",
+          "content": "放弃使用SimpleFetch插件方案，改用网桥插件方案\n修复 手环端与网桥的通信"
+        },
         {
           "version": "1.3.1",
           "content": "尝试修复 手环端与SimpleFetch插件牵手\n“启用SimpleFetch选项的状态"
@@ -102,10 +114,14 @@
       ]
     },
     "xmrw6": {
-      "version": "1.3.1",
-      "file_name": "downloads/com.lightland.velaai.release.1.3.1.rpk",
-      "versionCode": 5,
+      "version": "1.3.2",
+      "file_name": "downloads/com.lightland.velaai.release.1.3.2.rpk",
+      "versionCode": 6,
       "updatelogs": [
+        {
+          "version": "1.3.2",
+          "content": "放弃使用SimpleFetch插件方案，改用网桥插件方案\n修复 手环端与网桥的通信"
+        },
         {
           "version": "1.3.1",
           "content": "尝试修复 手环端与SimpleFetch插件牵手\n“启用SimpleFetch选项的状态"
@@ -125,10 +141,14 @@
       ]
     },
     "xmb10p": {
-      "version": "1.3.1",
-      "file_name": "downloads/com.lightland.velaai.release.1.3.1.rpk",
-      "versionCode": 5,
+      "version": "1.3.2",
+      "file_name": "downloads/com.lightland.velaai.release.1.3.2.rpk",
+      "versionCode": 6,
       "updatelogs": [
+        {
+          "version": "1.3.2",
+          "content": "放弃使用SimpleFetch插件方案，改用网桥插件方案\n修复 手环端与网桥的通信"
+        },
         {
           "version": "1.3.1",
           "content": "尝试修复 手环端与SimpleFetch插件牵手\n“启用SimpleFetch选项的状态"
@@ -153,7 +173,7 @@
       "recommended": [
         {
           "type": "plugin",
-          "id": "SimpleFetch"
+          "id": "网桥 FetchBridge"
         }
       ]
     }
