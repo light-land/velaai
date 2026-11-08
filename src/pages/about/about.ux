@@ -186,4 +186,19 @@ export default {
     align-items: flex-start;
   }
 }
+
+/* 圆屏 466×466（Xiaomi Watch S3 / S4） */
+@media (device-type: watch) and (shape: circle) {
+  .spacer-large {
+    height: 140px;
+  }
+
+  #info {
+    width: 88%;
+  }
+
+  #copyright {
+    width: 88%;
+  }
+}
 </style>

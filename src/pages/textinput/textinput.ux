@@ -114,7 +114,7 @@ export default {
   innerWidth() {
     const sw = (global.screenSize && global.screenSize.width) || 336
     const ratio =
-      this.screentype === "circle" ? 0.85 : global.deviceType === "watch" ? 0.75 : 0.83
+      this.screentype === "circle" ? 0.76 : global.deviceType === "watch" ? 0.75 : 0.83
     return sw * ratio - 24
   },
 
@@ -283,6 +283,47 @@ export default {
 
   .padding {
     height: 45px;
+  }
+}
+
+/* 圆屏 466×466（Xiaomi Watch S3 / S4）：键盘高 321 贴底，顶部空间紧张——
+   隐藏时钟与标题（要编辑哪个字段在上一页已选定），顶栏按钮缩小内收落在圆内；
+   输入行宽 76%（与 innerWidth 的 circle 比例一致），下沿轻触键盘顶部黑边属正常观感；
+   编辑行（清空/光标键）与键盘争高，圆屏隐藏，删除改用键盘 del 键 */
+@media (device-type: watch) and (shape: circle) {
+  .time {
+    display: none;
+  }
+
+  .title {
+    display: none;
+  }
+
+  .top {
+    width: 60px;
+    height: 60px;
+    top: 40px;
+  }
+
+  .leftButton {
+    left: 118px;
+  }
+
+  /* right 不生效（见 app.css 圆屏注释），换算成 left：288 = 466-118-60 */
+  .rightButton {
+    left: 288px;
+  }
+
+  .padding {
+    height: 100px;
+  }
+
+  .line {
+    width: 76%;
+  }
+
+  .edit-row {
+    display: none;
   }
 }
 </style>

@@ -89,4 +89,13 @@ scroll {
     width: 75%;
   }
 }
+
+/* 圆屏 466×466（Xiaomi Watch S3 / S4）：收款码 280px 居中滚动，弦宽足够，保持原尺寸 */
+@media (device-type: watch) and (shape: circle) {
+  .box {
+    margin-top: 140px;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+}
 </style>

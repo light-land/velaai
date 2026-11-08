@@ -207,4 +207,22 @@ scroll {
     width: 75%;
   }
 }
+
+/* 圆屏 466×466（Xiaomi Watch S3 / S4）：底部中央的新建按钮占 28+72px，列表底部留 116px */
+@media (device-type: watch) and (shape: circle) {
+  .conv-card {
+    height: 78px;
+    margin-bottom: 10px;
+  }
+
+  .conv-name {
+    font-size: 26px;
+  }
+
+  .box {
+    margin-top: 140px;
+    margin-bottom: 116px;
+    width: 90%;
+  }
+}
 </style>

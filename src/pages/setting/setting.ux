@@ -402,4 +402,17 @@ scroll {
     height: 72px;
   }
 }
+
+/* 圆屏 466×466（Xiaomi Watch S3 / S4） */
+@media (device-type: watch) and (shape: circle) {
+  .box {
+    margin-top: 140px;
+    margin-bottom: 20px;
+    width: 90%;
+  }
+
+  .set-row {
+    height: 72px;
+  }
+}
 </style>

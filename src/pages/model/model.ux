@@ -125,4 +125,12 @@ export default {
     width: 75%;
   }
 }
+
+/* 圆屏 466×466（Xiaomi Watch S3 / S4）：选择器居中于圆内，宽度收至 80% */
+@media (device-type: watch) and (shape: circle) {
+  .picker-box {
+    margin-top: 140px;
+    width: 86%;
+  }
+}
 </style>

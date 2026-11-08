@@ -591,4 +591,26 @@ scroll {
     width: 90%;
   }
 }
+
+/* 圆屏 466×466（Xiaomi Watch S3 / S4）：列表区下移避开顶栏按钮（62+72），
+   宽度收至 84% 让气泡两端落在圆内；底部给悬浮输入条留位 */
+@media (device-type: watch) and (shape: circle) {
+  .box {
+    margin-top: 140px;
+    margin-bottom: 110px;
+    width: 88%;
+  }
+
+  /* 欢迎语：按 466 屏高重新居中偏上，两侧留白避开圆弧 */
+  .welcome-text {
+    top: 176px;
+    padding: 0 64px;
+  }
+
+  /* 输入条做成悬浮胶囊：上浮 22px、左右各留 78px，胶囊两端与发送按钮落在圆内 */
+  .input-bar {
+    bottom: 22px;
+    padding: 0 78px;
+  }
+}
 </style>

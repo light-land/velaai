@@ -80,34 +80,56 @@
 }
 
 /* 看看是不是小米手表 */
+/* 圆屏 466×466（Xiaomi Watch S3 / S4）：按圆内切几何排版——
+   顶栏按钮 72×72，top 62 / 两侧各留 92 时四角距圆心 ≈222 < 233，完整落在圆内；
+   底部按钮移到圆底部中央（四角在圆外），bottom 28 时下缘距圆心最远 ≈226。
+   注意：真机实测本引擎下 right 定位不生效（按钮会被 flex 父级居中），
+   右侧按钮一律换算成 left 定位（302 = 466-92-72），与输入法键盘的全 left/top 定位一致。 */
 @media (device-type: watch) and (shape: circle) {
-  .leftButton {
-    left: 60%;
-  }
-
-  .rightButton {
-    right: 60%;
-  }
-
-  .top {
-    position: absolute;
-    top: 36px;
-  }
-
-  .bottom {
-    position: absolute;
-    bottom: 6px;
+  .time {
+    top: 16px;
   }
 
   .title {
     position: absolute;
-    top: 35px;
+    top: 54px;
     display: flex;
     justify-items: center;
     align-items: center;
     font-size: 32px;
     font-weight: bold;
     color: rgba(255, 255, 255, 1);
+  }
+
+  .top {
+    position: absolute;
+    top: 62px;
+  }
+
+  .leftButton {
+    left: 92px;
+    width: 72px;
+    height: 72px;
+  }
+
+  .rightButton {
+    left: 302px;
+    width: 72px;
+    height: 72px;
+  }
+
+  .bottom {
+    position: absolute;
+    bottom: 28px;
+  }
+
+  /* 底部按钮（历史页新建按钮等）：圆屏底部只有中央可用，居中放置 */
+  .bottom.leftButton {
+    left: 197px;
+  }
+
+  .bottom.rightButton {
+    left: 197px;
   }
 }
 
